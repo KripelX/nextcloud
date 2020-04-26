@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 
 volumes:
   nextcloud:
@@ -7,6 +7,7 @@ volumes:
 services:
   db:
     image: postgres
+    container_name: postgres_db
     restart: always
     volumes:
       - db:/var/lib/postgresql/data
@@ -19,10 +20,42 @@ services:
 
   app:
     image: nextcloud
-    ports:
-      - 8080:80
+    container_name: nextcloud.kripel
     links:
       - db
     volumes:
       - nextcloud:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`nextcloud.kripel`)"
+      - "traefik.http.routers.web.entrypoints=web"
+
+      - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
+      - "traefik.http.routers.web.middlewares=https-only"
+
+      - "traefik.http.routers.websecure.rule=Host(`nextcloud.kripel`)"
+      - "traefik.http.routers.websecure.entrypoints=websecure"
+      - "traefik.http.routers.websecure.tls=true"
     restart: always
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--log.level=INFO"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.file.directory=/config"
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config:/config:ro
+      - ./certs/:/certs:ro
+
+

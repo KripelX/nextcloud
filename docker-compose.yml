@@ -34,6 +34,13 @@ services:
       - "traefik.http.routers.websecure.rule=Host(`nextcloud.kripel`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
+      - "traefik.http.routers.websecure.tls.certresolver=default"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
+      - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"
+      - "traefik.http.middlewares.nextcloud-caldav.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement=https://$$1/remote.php/dav/"
+      - "traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent=true"
     restart: always
 
   traefik:

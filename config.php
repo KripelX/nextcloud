@@ -23,14 +23,14 @@ $CONFIG = array (
   'trusted_domains' =>
   array (
     0 => '10.0.0.97',
-    1 => 'nextcloud.kripel',
+    1 => 'nextcloud.dandi',
     2 => 'localhost',
     3 => '172.18.0.4',
   ),
   'datadirectory' => '/var/www/html/data',
   'dbtype' => 'pgsql',
   'version' => '18.0.4.2',
-  'overwrite.cli.url' => 'http://nextcloud.kripel',
+  'overwrite.cli.url' => 'http://nextcloud.dandi',
   'dbname' => 'nextcloud',
   'dbhost' => '10.0.0.97:5432',
   'dbport' => '',
@@ -40,7 +40,7 @@ $CONFIG = array (
   'installed' => true,
   'maintenance' => false,
   'loglevel' => 2,
-  'overwritehost' => 'nextcloud.kripel',
+  'overwritehost' => 'nextcloud.dandi',
   'overwriteprotocol' => 'https',
   'forwarded_for_headers' =>
   array (

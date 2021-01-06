@@ -6,7 +6,7 @@ volumes:
 
 services:
   db:
-    image: postgres
+    image: postgres:12.4
     container_name: postgres_db
     restart: always
     volumes:
@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=nextcloud
 
   app:
-    image: nextcloud
+    image: nextcloud:latest
     container_name: nextcloud_app
     links:
       - db

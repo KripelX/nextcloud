@@ -6,7 +6,7 @@ volumes:
 
 services:
   db:
-    image: postgres:12.4
+    image: postgres:12.6
     container_name: postgres_db
     restart: always
     volumes:
@@ -34,7 +34,7 @@ services:
       - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
-      - "traefik.http.routers.websecure.tls.certresolver=default"
+        #- "traefik.http.routers.websecure.tls.certresolver=default"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
       - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"

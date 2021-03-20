@@ -34,7 +34,6 @@ services:
       - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
-        #- "traefik.http.routers.websecure.tls.certresolver=default"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
       - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"

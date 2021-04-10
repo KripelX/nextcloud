@@ -1,6 +1,5 @@
 [tls.stores]
   [tls.stores.default]
-    [[tls.certificates]]
+    [tls.stores.default.defaultCertificate]
       certFile = "/certs/server.crt"
       keyFile = "/certs/server.key"
-      stores = ["default"]

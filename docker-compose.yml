@@ -2,15 +2,15 @@ version: '3.7'
 
 volumes:
   nextcloud:
-  db:
+  db13:
 
 services:
-  db:
-    image: postgres:12.7
-    container_name: postgres_db
+  db13:
+    image: postgres:13
+    container_name: postgres_db13
     restart: always
     volumes:
-      - db:/var/lib/postgresql/data
+      - db13:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -19,10 +19,10 @@ services:
       - POSTGRES_USER=nextcloud
 
   app:
-    image: nextcloud:latest
+    image: nextcloud:22
     container_name: nextcloud_app
     links:
-      - db
+      - db13
     volumes:
       - nextcloud:/var/www/html
     labels:
@@ -43,7 +43,7 @@ services:
     restart: always
 
   traefik:
-    image: traefik:latest
+    image: traefik:2.5
     container_name: traefik
     command:
       - "--log.level=INFO"

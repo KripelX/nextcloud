@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=nextcloud
 
   app:
-    image: nextcloud:23
+    image: nextcloud:24
     container_name: nextcloud_app
     links:
       - db13
@@ -43,7 +43,7 @@ services:
     restart: always
 
   traefik:
-    image: traefik:2.6
+    image: traefik:2.9
     container_name: traefik
     command:
       - "--log.level=INFO"

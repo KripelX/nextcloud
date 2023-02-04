@@ -13,14 +13,12 @@ services:
       - db13:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=nextcloud
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=nextcloud
 
   app:
-    image: nextcloud:24
+    image: nextcloud:25
     container_name: nextcloud_app
+    depends_on: 
+      - db13
     links:
       - db13
     volumes:
@@ -62,3 +60,30 @@ services:
       - ./config:/config:ro
       - ./certs/:/certs:ro
     restart: always
+
+  adguard:
+    container_name: adguard
+    image: adguard/adguardhome
+    volumes:
+      - /home/andreas/adguard/workdir:/opt/adguardhome/work
+      - /home/andreas/adguard/confdir:/opt/adguardhome/conf
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 3000:3000/tcp
+      - 853:853/tcp
+    restart: unless-stopped
+
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:latest
+    depends_on: 
+      - db13
+    volumes:
+      - /home/andreas/hassio/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/serial/by-id/usb-RFXCOM_RFXtrx433_A11ZKZOT-if00-port0:/dev/ttyUSB0
+      - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2489069-if00:/dev/ttyACM0
+    restart: unless-stopped
+    network_mode: host

@@ -11,6 +11,7 @@ services:
     restart: always
     volumes:
       - db13:/var/lib/postgresql/data
+      - /var/run/postgresql:/var/run/postgresql
     ports:
       - 5432:5432
 
@@ -23,6 +24,7 @@ services:
       - db13
     volumes:
       - nextcloud:/var/www/html
+      - /var/run/postgresql:/var/run/postgresql
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`)"
@@ -57,8 +59,8 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config:/config:ro
-      - ./certs/:/certs:ro
+      - /home/andreas/traefik/config:/config:ro
+      - /home/andreas/traefik/certs/:/certs:ro
     restart: always
 
   adguard:
@@ -82,6 +84,7 @@ services:
     volumes:
       - /home/andreas/hassio/config:/config
       - /etc/localtime:/etc/localtime:ro
+      - /var/run/postgresql:/run/postgresql 
     devices:
       - /dev/serial/by-id/usb-RFXCOM_RFXtrx433_A11ZKZOT-if00-port0:/dev/ttyUSB0
       - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2489069-if00:/dev/ttyACM0

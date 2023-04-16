@@ -16,7 +16,7 @@ services:
       - 5432:5432
 
   app:
-    image: nextcloud:25
+    image: nextcloud:26
     container_name: nextcloud_app
     depends_on: 
       - db13
@@ -27,11 +27,11 @@ services:
       - /var/run/postgresql:/var/run/postgresql
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`)"
+      - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`,`10.0.0.88`)"
       - "traefik.http.routers.web.entrypoints=web"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.routers.web.middlewares=https-only"
-      - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`)"
+      - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`,`10.0.0.88`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"

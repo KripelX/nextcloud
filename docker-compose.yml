@@ -16,15 +16,17 @@ services:
       - 5432:5432
 
   app:
-    image: nextcloud:26
+    image: nextcloud:27
     container_name: nextcloud_app
     depends_on: 
       - db13
+      - redis
     links:
       - db13
     volumes:
       - nextcloud:/var/www/html
       - /var/run/postgresql:/var/run/postgresql
+      - /var/run/redis-socket:/var/run/redis-socket
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`,`10.0.0.88`)"
@@ -43,7 +45,7 @@ services:
     restart: always
 
   traefik:
-    image: traefik:2.9
+    image: traefik:2.10
     container_name: traefik
     command:
       - "--log.level=INFO"
@@ -78,7 +80,7 @@ services:
 
   homeassistant:
     container_name: homeassistant
-    image: homeassistant/home-assistant:latest
+    image: ghcr.io/home-assistant/home-assistant:stable
     depends_on: 
       - db13
     volumes:
@@ -90,3 +92,13 @@ services:
       - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2489069-if00:/dev/ttyACM0
     restart: unless-stopped
     network_mode: host
+
+  redis:
+    container_name: redis-nc
+    image: redis:7.0
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - /var/run/redis-socket:/run/redis-socket
+      - /home/andreas/redis/config:/usr/local/etc/redis
+      - /home/andreas/redis/data:/data
+    restart: always

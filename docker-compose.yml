@@ -15,8 +15,9 @@ services:
     ports:
       - 5432:5432
 
-  app:
-    image: nextcloud:27
+  mynextcloud:
+    build:
+      context: ../nextcloud
     container_name: nextcloud_app
     depends_on: 
       - db13

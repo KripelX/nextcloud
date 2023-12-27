@@ -84,6 +84,8 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     depends_on: 
       - db13
+      - mosquitto
+      - grott
     volumes:
       - /home/andreas/hassio/config:/config
       - /etc/localtime:/etc/localtime:ro
@@ -103,3 +105,23 @@ services:
       - /home/andreas/redis/config:/usr/local/etc/redis
       - /home/andreas/redis/data:/data
     restart: always
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    volumes:
+      - /home/andreas/mosquitto/config:/mosquitto/config
+      - /home/andreas/mosquitto/data:/mosquitto/data
+      - /home/andreas/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+
+  grott:
+    container_name: grott
+    image: ledidobe/grott:2.8.2
+    volumes:
+      - /home/andreas/grott/output:/tmp/grottlog/
+      - /home/andreas/grott/config/grott.ini:/app/grott.ini
+    ports:
+      - 5279:5279
+    restart: unless-stopped 

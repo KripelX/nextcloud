@@ -8,7 +8,7 @@ services:
   db13:
     image: postgres:13
     container_name: postgres_db13
-    restart: always
+    restart: unless-stopped
     volumes:
       - db13:/var/lib/postgresql/data
       - /var/run/postgresql:/var/run/postgresql
@@ -43,7 +43,7 @@ services:
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement=https://$$1/remote.php/dav/"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent=true"
-    restart: always
+    restart: unless-stopped
 
   traefik:
     image: traefik:2.10
@@ -64,11 +64,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/andreas/traefik/config:/config:ro
       - /home/andreas/traefik/certs/:/certs:ro
-    restart: always
+    restart: unless-stopped
 
   adguard:
     container_name: adguard
-    image: adguard/adguardhome
+    image: adguard/adguardhome:latest
     volumes:
       - /home/andreas/adguard/workdir:/opt/adguardhome/work
       - /home/andreas/adguard/confdir:/opt/adguardhome/conf
@@ -98,13 +98,13 @@ services:
 
   redis:
     container_name: redis-nc
-    image: redis:7.0
+    image: redis:7
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - /var/run/redis-socket:/run/redis-socket
       - /home/andreas/redis/config:/usr/local/etc/redis
       - /home/andreas/redis/data:/data
-    restart: always
+    restart: unless-stopped
 
   mosquitto:
     container_name: mosquitto
@@ -115,6 +115,7 @@ services:
       - /home/andreas/mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
+    restart: unless-stopped
 
   grott:
     container_name: grott
@@ -124,4 +125,14 @@ services:
       - /home/andreas/grott/config/grott.ini:/app/grott.ini
     ports:
       - 5279:5279
+    restart: unless-stopped 
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    ports:
+      - 9443:9443
+    volumes:
+      - /home/andreas/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped 

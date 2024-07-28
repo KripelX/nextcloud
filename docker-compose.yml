@@ -34,11 +34,11 @@ services:
       - /var/run/redis-socket:/var/run/redis-socket
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`,`10.0.0.88`)"
+      - "traefik.http.routers.web.rule=Host(`nextcloud.dandi`) || Host(`10.0.0.88`)"
       - "traefik.http.routers.web.entrypoints=web"
       - "traefik.http.middlewares.https-only.redirectscheme.scheme=https"
       - "traefik.http.routers.web.middlewares=https-only"
-      - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`,`10.0.0.88`)"
+      - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`) || Host(`10.0.0.88`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
@@ -50,7 +50,7 @@ services:
     restart: unless-stopped
 
   traefik:
-    image: traefik:2.11
+    image: traefik:latest
     container_name: traefik
     command:
       - "--log.level=INFO"

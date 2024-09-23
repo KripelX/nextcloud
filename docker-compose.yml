@@ -43,6 +43,7 @@ services:
       - "traefik.http.routers.websecure.tls=true"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsIncludeSubdomains=true"
       - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement=https://$$1/remote.php/dav/"
@@ -123,7 +124,7 @@ services:
 
   grott:
     container_name: grott
-    image: ledidobe/grott:2.8.2
+    image: ledidobe/grott:beta
     volumes:
       - /home/andreas/grott/output:/tmp/grottlog
       - /home/andreas/grott/config/grott.ini:/app/grott.ini

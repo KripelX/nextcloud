@@ -141,3 +141,14 @@ services:
       - /home/andreas/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped 
+
+  novnc:
+    container_name: novnc
+    image: theasp/novnc:latest
+    environment:
+      - DISPLAY_WIDTH=800
+      - DISPLAY_HEIGHT=450
+      - RUN_XTERM=no
+      - RUN_FLUXBOX=no
+    ports:
+      - "8081:8080"

@@ -41,10 +41,10 @@ services:
       - "traefik.http.routers.websecure.rule=Host(`nextcloud.dandi`) || Host(`10.0.0.88`)"
       - "traefik.http.routers.websecure.entrypoints=websecure"
       - "traefik.http.routers.websecure.tls=true"
-      - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=15552000"
+      - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"
+      - "traefik.http.middlewares.nextcloud-headers.headers.stsSeconds=63072000"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsPreload=true"
       - "traefik.http.middlewares.nextcloud-headers.headers.stsIncludeSubdomains=true"
-      - "traefik.http.routers.websecure.middlewares=nextcloud-headers,nextcloud-caldav"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement=https://$$1/remote.php/dav/"
       - "traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent=true"
@@ -126,7 +126,7 @@ services:
     container_name: grott
     image: ledidobe/grott:beta
     volumes:
-      - /home/andreas/grott/output:/tmp/grottlog
+      - /home/andreas/grott/output:/tmp/grottlog/
       - /home/andreas/grott/config/grott.ini:/app/grott.ini
     ports:
       - 5279:5279

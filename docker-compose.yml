@@ -152,3 +152,4 @@ services:
       - RUN_FLUXBOX=no
     ports:
       - "8081:8080"
+    restart: always

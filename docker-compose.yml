@@ -8,8 +8,6 @@ services:
     image: postgres:16
     container_name: postgres_db16
     restart: unless-stopped
-    environment:
-      POSTGRES_PASSWORD: "postgres"
     volumes:
       - db16:/var/lib/postgresql/data
       - /var/run/postgresql:/var/run/postgresql
@@ -122,7 +120,7 @@ services:
 
   grott:
     container_name: grott
-    image: ledidobe/grott:beta
+    image: ledidobe/grott:master
     volumes:
       - /home/andreas/grott/output:/tmp/grottlog/
       - /home/andreas/grott/config/grott.ini:/app/grott.ini
@@ -141,3 +139,15 @@ services:
     ports:
       - "8081:8080"
     restart: always
+
+  go2rtc:
+    image: alexxit/go2rtc:latest
+    container_name: go2rtc
+    network_mode: host       # important for WebRTC, HomeKit, UDP cameras
+    privileged: true         # only for FFmpeg hardware transcoding
+    restart: unless-stopped  # autorestart on fail or config change from WebUI
+    environment:
+      - TZ=Europe/Vienna  # timezone in logs
+    volumes:
+      - "/home/andreas/go2rtc:/config"
+

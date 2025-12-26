@@ -61,6 +61,8 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
+      #- 8123:8123 ### https tests
+      #- 1984:1984 ### https tests
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/andreas/traefik/config:/config:ro
@@ -94,6 +96,18 @@ services:
     devices:
       - /dev/serial/by-id/usb-RFXCOM_RFXtrx433_A11ZKZOT-if00-port0:/dev/ttyUSB0
       - /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2489069-if00:/dev/ttyACM0
+    ### https tests  
+    #labels:
+    #  - "traefik.enable=true"
+    #  # Router
+    #  - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.andi`)"
+    #  - "traefik.http.routers.homeassistant.entrypoints=websecure"
+    #  - "traefik.http.routers.homeassistant.tls=true"
+    #  # Service
+    #  - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     restart: unless-stopped
     network_mode: host
 
@@ -150,4 +164,13 @@ services:
       - TZ=Europe/Vienna  # timezone in logs
     volumes:
       - "/home/andreas/go2rtc:/config"
+    ### https tests
+    #labels:
+    #  - "traefik.enable=true"
+    #  # Router
+    #  - "traefik.http.routers.go2rtc.rule=Host(`go2rtc.andi`)"
+    #  - "traefik.http.routers.go2rtc.entrypoints=websecure"
+    #  - "traefik.http.routers.go2rtc.tls=true"
+    #  # Service
+    #  - "traefik.http.services.go2rtc.loadbalancer.server.port=1984"
 
